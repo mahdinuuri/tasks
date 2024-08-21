@@ -4,33 +4,26 @@ from .models import Opera, Members
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Members
-        fields = '__all__'
+        fields = "__all__"
 
 class OperaSerializer(serializers.ModelSerializer):
-    members = MemberSerializer(many=True)
+    members = serializers.PrimaryKeyRelatedField(queryset=Members.objects.all(), many=True)
 
     class Meta:
         model = Opera
-        fields = '__all__'
+        fields = "__all__"
 
     def create(self, validated_data):
-        members_data = validated_data.pop('members')
+        members = validated_data.pop('members', [])
         opera = Opera.objects.create(**validated_data)
-        
-        for member_data in members_data:
-            member, created = Members.objects.get_or_create(**member_data)
-            opera.members.add(member)
-        
+        opera.members.set(members)  # Use set to associate members by their IDs
         return opera
 
     def update(self, instance, validated_data):
-        members_data = validated_data.pop('members', None)
+        members = validated_data.pop('members', None)
         
-        if members_data is not None:
-            instance.members.clear()
-            for member_data in members_data:
-                member, created = Members.objects.get_or_create(**member_data)
-                instance.members.add(member)
+        if members is not None:
+            instance.members.set(members)  # Update the members list
         
         instance.task = validated_data.get('task', instance.task)
         instance.duedate = validated_data.get('duedate', instance.duedate)
