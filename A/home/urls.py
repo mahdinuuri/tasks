@@ -2,14 +2,19 @@ from django.urls import path
 from . import views
 
 app_name = 'home'
+from django.urls import path
+from . import views
+
+app_name = 'home'
 
 urlpatterns = [
-    path('opera/', views.opera_list, name='opera-list'),  # To create a new opera (POST request)
-    path('opera/<int:pk>/', views.get_opera, name='get-opera'),  # To retrieve a specific opera (GET request)
-    path('opera/<int:pk>/update/', views.update_opera, name='update-opera'),  # To update a specific opera (PUT request)
-    path('opera/<int:pk>/delete/', views.delete_opera, name='delete-opera'),  # To delete a specific opera (DELETE request)
-    path('members/', views.create_member, name='create-member'),  # To create a new member (POST request)
-    path('members/<int:pk>/', views.get_member, name='get-member'),
-    path('members/<int:pk>/update/', views.update_member, name='update-member'),
-    path('members/<int:pk>/delete/', views.delete_member, name='delete-member'),
+    path('opera/', views.OperaCreate.as_view(), name='opera-create'),
+    path('opera/<int:pk>/', views.OperaDetail.as_view(), name='opera-detail'),
+    path('opera/<int:pk>/update/', views.OperaUpdate.as_view(), name='opera-update'),
+    path('opera/<int:pk>/delete/', views.OperaDelete.as_view(), name='opera-delete'),
+    path('members/', views.MemberCreate.as_view(), name='member-create'),
+    path('members/<int:pk>/', views.MemberDetail.as_view(), name='member-detail'),
+    path('members/<int:pk>/update/', views.MemberUpdate.as_view(), name='member-update'),
+    path('members/<int:pk>/delete/', views.MemberDelete.as_view(), name='member-delete'),
 ]
+

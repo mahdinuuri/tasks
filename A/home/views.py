@@ -1,89 +1,53 @@
-from django.shortcuts import render
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Opera, Members
-from .serializers import OperaSerializer, MemberSerializer
-
-@api_view(['GET'])
-def get_member(request, pk):
-    try:
-        member = Members.objects.get(pk=pk)
-    except Members.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = MemberSerializer(member)
-    return Response(serializer.data)
-
-@api_view(['POST'])
-def create_member(request):
-    serializer = MemberSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['PUT'])
-def update_member(request, pk):
-    try:
-        member = Members.objects.get(pk=pk)
-    except Members.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = MemberSerializer(member, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['DELETE'])
-def delete_member(request, pk):
-    try:
-        member = Members.objects.get(pk=pk)
-    except Members.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    member.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+from rest_framework import generics
+from .models import Members
+from .models import Opera
+from .serializers import MemberSerializer , OperaSerializer
 
 
-@api_view(['POST'])
-def opera_list(request):
-    serializer = OperaSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class MemberDetail(generics.RetrieveAPIView):
+    queryset = Members.objects.all()
+    serializer_class = MemberSerializer
 
-@api_view(['GET'])
-def get_opera(request, pk):
-    try:
-        opera = Opera.objects.get(pk=pk)
-    except Opera.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = OperaSerializer(opera)
-    return Response(serializer.data)
+class MemberCreate(generics.CreateAPIView):
+    queryset = Members.objects.all()
+    serializer_class = MemberSerializer
 
-@api_view(['PUT'])
-def update_opera(request, pk):
-    try:
-        opera = Opera.objects.get(pk=pk)
-    except Opera.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = OperaSerializer(opera, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class MemberUpdate(generics.UpdateAPIView):
+    queryset = Members.objects.all()
+    serializer_class = MemberSerializer
 
-@api_view(['DELETE'])
-def delete_opera(request, pk):
-    try:
-        opera = Opera.objects.get(pk=pk)
-    except Opera.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    opera.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+class MemberDelete(generics.DestroyAPIView):
+    queryset = Members.objects.all()
+    serializer_class = MemberSerializer
+
+class OperaDetail(generics.RetrieveAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer
+
+class OperaCreate(generics.CreateAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer
+
+class OperaUpdate(generics.UpdateAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer
+
+class OperaDelete(generics.DestroyAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer
+
+class OperaDetail(generics.RetrieveAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer
+
+class OperaCreate(generics.CreateAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer
+
+class OperaUpdate(generics.UpdateAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer
+
+class OperaDelete(generics.DestroyAPIView):
+    queryset = Opera.objects.all()
+    serializer_class = OperaSerializer

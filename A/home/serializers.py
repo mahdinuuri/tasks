@@ -16,14 +16,14 @@ class OperaSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         members = validated_data.pop('members', [])
         opera = Opera.objects.create(**validated_data)
-        opera.members.set(members)  # Use set to associate members by their IDs
+        opera.members.set(members) 
         return opera
 
     def update(self, instance, validated_data):
         members = validated_data.pop('members', None)
         
         if members is not None:
-            instance.members.set(members)  # Update the members list
+            instance.members.set(members)  
         
         instance.task = validated_data.get('task', instance.task)
         instance.duedate = validated_data.get('duedate', instance.duedate)
